@@ -1,10 +1,10 @@
 {
-    "compilerOptions": {
-        "module": "ESNext",
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "jsx": "react-jsx",
-        "moduleResolution": "NodeNext",
-        "resolveJsonModule": true
-    }
+  "compilerOptions": {
+    "module": "NodeNext",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true
+  }
 }

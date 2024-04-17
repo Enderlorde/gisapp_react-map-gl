@@ -1,3 +1,4 @@
 node_modules
 *.log
-src/static/data
+src/static
+src/public/static
