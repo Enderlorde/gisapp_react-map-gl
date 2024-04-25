@@ -1,6 +1,6 @@
 import type { Feature, MapLayerMouseEvent } from "maplibre-gl";
 import * as React from "react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import {
     Map,
@@ -18,11 +18,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 const App = () => {
     const mapRef = useRef();
-    const [popup, setPopup] = useState(null);
+    const popupRef = useRef();
 
     const mapMouseMoveHandler = (evt: MapLayerMouseEvent): void => {
         const map: MapInstance = mapRef.current;
-
+        const popup = popupRef.current;
         const features: Feature[] = map.queryRenderedFeatures(evt.point);
         console.log(features);
 
@@ -34,11 +34,9 @@ const App = () => {
                otd: ${val.properties["otd"]}`;
         });
         evt.originalEvent.stopPropagation();
-        setPopup({
-            longitude: evt.lngLat.lng,
-            latitude: evt.lngLat.lat,
-            info: info,
-        });
+
+        popup.setLngLat(evt.lngLat);
+        popup.setHTML(info);
     };
 
     const layers = Array.from({ length: 52 }, (_, i) => i + 1);
@@ -202,7 +200,7 @@ const App = () => {
                         filter={["==", "ID_ind", `${val}`]}
                         paint={{
                             "fill-color": chooseColor(val),
-                            "fill-opacity": 0.9,
+                            /* "fill-opacity": 0.9, */
                             "fill-outline-color": "green",
                         }}
                     />
@@ -270,19 +268,19 @@ const App = () => {
                         {multipLayers}
                     </Source>
 
+                    <Popup
+                        ref={popupRef}
+                        anchor="bottom"
+                        longitude={27.865442319094427}
+                        latitude={53.87226539312766}
+                        closeOnClick={false}
+                    >
+                        Test
+                    </Popup>
+
                     <FullscreenControl />
                     <ScaleControl />
                 </Map>
-                {popup && (
-                    <Popup
-                        anchor="bottom"
-                        longitude={Number(popup.longitude)}
-                        latitude={Number(popup.latitude)}
-                        onClose={() => setPopup(null)}
-                    >
-                        {popup.info}
-                    </Popup>
-                )}
             </MapProvider>
         </div>
     );
